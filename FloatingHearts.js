@@ -17,6 +17,7 @@ class FloatingHearts extends Component {
   createHeart(index) {
     return {
       id: index,
+      color: this.props.colors[Math.floor(getRandomNumber(0, this.props.colors.length))],
       right: getRandomNumber(this.props.rightMin ? this.props.rightMin : 50, this.props.rightMax ? this.props.rightMax : 150),
     }
   }
@@ -48,22 +49,24 @@ class FloatingHearts extends Component {
 
   render() {
     const { height } = this.state
-    const { color, renderCustomShape } = this.props
+    const { renderCustomShape } = this.props
     const isReady = height !== null
 
     let heartProps = {}
-    if (color !== null) {
-      heartProps.color = color
-    }
-
+  
     return (
       <View style={[styles.container, this.props.style]} onLayout={this.handleOnLayout} pointerEvents="none">
         {isReady &&
-          this.state.hearts.map(({ id, right }) =>
-            <AnimatedShape key={id} height={height} style={{ right }} onComplete={this.removeHeart.bind(this, id)}>
-              {renderCustomShape ? renderCustomShape(id) : <HeartShape {...heartProps} />}
-            </AnimatedShape>
-          )}
+          this.state.hearts.map(
+            ({ id, right, color }) => {
+              return (            
+                <AnimatedShape key={id} height={height} style={{ right }} onComplete={this.removeHeart.bind(this, id)}>
+                  {renderCustomShape ? renderCustomShape(id) : <HeartShape color={color} {...heartProps} />}
+                </AnimatedShape>
+              )
+            }
+          )
+        }
       </View>
     )
   }
@@ -72,7 +75,7 @@ class FloatingHearts extends Component {
 FloatingHearts.propTypes = {
   style: View.propTypes.style,
   count: PropTypes.number,
-  color: PropTypes.string,
+  colors: PropTypes.array,
   renderCustomShape: PropTypes.func,
 }
 
