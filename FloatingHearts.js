@@ -61,7 +61,7 @@ class FloatingHearts extends Component {
             ({ id, right, color }) => {
               return (            
                 <AnimatedShape key={id} height={height} style={{ right }} onComplete={this.removeHeart.bind(this, id)}>
-                  {renderCustomShape ? renderCustomShape(id) : <HeartShape color={color} {...heartProps} />}
+                  {renderCustomShape ? renderCustomShape(id, color) : <HeartShape color={color} {...heartProps} />}
                 </AnimatedShape>
               )
             }
