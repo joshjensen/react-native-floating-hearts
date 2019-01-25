@@ -14,6 +14,11 @@ class FloatingHearts extends Component {
     height: null,
   };
 
+  constructor() {
+    super();
+    this.createHeart = this.createHeart.bind(this);
+  }
+
   createHeart(index) {
     return {
       id: index,
@@ -28,12 +33,14 @@ class FloatingHearts extends Component {
   }
 
   removeHeart(id) {
-    this.setState({
-      hearts: this.state.hearts.filter(heart => heart.id !== id),
+    this.setState(prevState => {
+      prevState.hearts.shift();
+      return { hearts: prevState.hearts };
     });
   }
 
   componentWillUpdate(nextProps) {
+    console.log(nextProps);
     const oldCount = this.props.count;
     const newCount = nextProps.count;
     const numHearts = newCount - oldCount;
@@ -42,12 +49,13 @@ class FloatingHearts extends Component {
       return;
     }
 
-    const items = Array(numHearts).fill();
-    const newHearts = items
-      .map((item, i) => oldCount + i)
-      .map(this.createHeart.bind(this));
+    this.setState(prevState => {
+      prevState.hearts.push(this.createHeart(nextProps.count));
 
-    this.setState({ hearts: this.state.hearts.concat(newHearts) });
+      return {
+        hearts: prevState.hearts,
+      };
+    });
   }
 
   handleOnLayout = e => {
