@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Animated, StyleSheet } from 'react-native';
+import { View, ViewPropTypes, Animated, StyleSheet } from 'react-native';
 
 import HeartShape from './HeartShape';
 
@@ -40,7 +40,6 @@ class FloatingHearts extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    console.log(nextProps);
     const oldCount = this.props.count;
     const newCount = nextProps.count;
     const numHearts = newCount - oldCount;
@@ -100,7 +99,7 @@ class FloatingHearts extends Component {
 }
 
 FloatingHearts.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
   count: PropTypes.number,
   colors: PropTypes.array,
   renderCustomShape: PropTypes.func,
@@ -208,7 +207,7 @@ class AnimatedShape extends Component {
 AnimatedShape.propTypes = {
   height: PropTypes.number.isRequired,
   onComplete: PropTypes.func.isRequired,
-  style: View.propTypes.style,
+  style: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
   children: PropTypes.node.isRequired,
 };
 
